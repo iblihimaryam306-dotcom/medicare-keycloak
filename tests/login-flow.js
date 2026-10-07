@@ -73,6 +73,13 @@ const server = http.createServer(async (req, res) => {
       console.log("=== " + name + " : payload ===\n" + JSON.stringify(payload, null, 2));
     }
   }
+
+  require("fs").writeFileSync(
+    require("path").join(__dirname, "auth-header.local"),
+    "Authorization: Bearer " + data.access_token + "\n"
+  );
+  console.log("\nEn-tete ecrit dans tests/auth-header.local (valable 5 minutes).");
+
   res.setHeader("Content-Type", "text/html; charset=utf-8");
   res.end("<h1>Connexion reussie</h1><p>Retourne dans le terminal pour lire les tokens. Tu peux fermer cet onglet.</p>");
   finish(0);
