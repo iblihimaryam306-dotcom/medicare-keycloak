@@ -16,12 +16,16 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                       .authorizeHttpRequests(auth -> auth
+                                   .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/health").permitAll()
                 .requestMatchers("/api/patient/**").hasRole("PATIENT")
                 .requestMatchers("/api/doctor/**").hasRole("DOCTOR")
                 .requestMatchers("/api/secretary/**").hasRole("SECRETARY")
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers("/api/appointments/**").hasAnyRole("PATIENT", "DOCTOR", "SECRETARY")
+                .requestMatchers("/api/records/**").hasAnyRole("PATIENT", "DOCTOR")
+                .requestMatchers("/api/patients/me/**").hasRole("PATIENT")
+                .requestMatchers("/api/doctors/me/**").hasRole("DOCTOR")
                 .anyRequest().authenticated())
             .oauth2ResourceServer(oauth2 -> oauth2
                 .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())));
@@ -33,4 +37,4 @@ public class SecurityConfig {
         converter.setJwtGrantedAuthoritiesConverter(new KeycloakRolesConverter());
         return converter;
     }
-}
+}   
