@@ -1,0 +1,22 @@
+# Secrets et fichiers locaux
+.env
+.env.local
+*.local
+*.pem
+*.key
+
+# Java / Maven
+target/
+*.class
+
+# Node / React
+node_modules/
+dist/
+build/
+
+# IDE et systeme
+.idea/
+.vscode/
+*.iml
+Thumbs.db
+*.log
