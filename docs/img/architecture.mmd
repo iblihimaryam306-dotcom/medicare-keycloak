@@ -1,0 +1,16 @@
+flowchart TB
+    U["<b>Utilisateur</b><br/>Patient · Médecin · Secrétaire · Admin"]
+    UI["<b>medicare-ui</b><br/>React + keycloak-js · :3000"]
+    KC["<b>Keycloak 26.7</b><br/>realm medicare · :8080"]
+    KDB[("PostgreSQL<br/>keycloak-db")]
+    API["<b>medicare-api</b><br/>Spring Boot · :9080"]
+    MEM[("Données fictives en mémoire<br/>+ journal d'audit")]
+    U -- "① ouvre l'application" --> UI
+    UI -- "② redirige vers Keycloak (PKCE S256)" --> KC
+    U -- "③ identifiant + mot de passe<br/>(+ code TOTP si médecin)" --> KC
+    KC -- "④ jeton JWT signé RS256" --> UI
+    UI -- "⑤ requête + Authorization: Bearer" --> API
+    API -. "⑥ clés publiques (JWKS)" .-> KC
+    API -- "⑦ rôle puis objet (sub)" --> MEM
+    API -- "⑧ 200 / 401 / 403" --> UI
+    KC --- KDB
